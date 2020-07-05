@@ -97,4 +97,4 @@ plt.xlabel('days')
 plt.ylabel('number of people')
 plt.title('Republic of Korea')
 plt.legend(loc="upper right")
-plt.show()
+plt.show() #그래프 출력
