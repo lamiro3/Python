@@ -2,7 +2,6 @@ import sys
 from random import *
 from PyQt5.QtWidgets import *
 from simulation import *
-from graph import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import numpy as np 
 import matplotlib.pylab as plt
@@ -20,9 +19,6 @@ class mainScreen(QWidget):
         self.initUI()
     
     def initUI(self):
-        self.fig = plt.figure(figsize=(70,70)) #출력되는 그래프 크기
-        self.canvas = FigureCanvas(self.fig)
-
         self.case_label = QLabel("총 인원", self)
 
         self.case_num = QLineEdit(self)
@@ -36,9 +32,6 @@ class mainScreen(QWidget):
         layout.addWidget(self.case_label)
         layout.addWidget(self.case_num)
         layout.addWidget(case_btn)
-        layout.addWidget(self.canvas)
-
-        self.canvas.draw()
 
         self.setLayout(layout)
 
@@ -55,6 +48,7 @@ class mainScreen(QWidget):
             self.case_dic_x[f'cx{i+1}'] = randint(-400, 400)
             self.case_dic_y[f'cy{i+1}'] = randint(-400, 400)
         begin_simulation(self.case_dic_x, self.case_dic_y, self.num, randint(1, self.num))
+        return
         #print(self.case_dic_x)
 
 app=QApplication(sys.argv)

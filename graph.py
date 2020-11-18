@@ -1,7 +1,10 @@
 import numpy as np 
+import time as tt
 import matplotlib.pylab as plt
 from scipy.integrate import odeint
+from simulation import *
 
+plt.ion()
 def SIR(x, t, beta, gamma):
     s = x[0] # 전체 취약자수
     i = x[1] # 전체 감염자수
@@ -14,12 +17,15 @@ def SIR(x, t, beta, gamma):
     y = [dsdt, didt, drdt]
     return y
 
-def _plot(func, x, t, beta, gamma, N):
+def plot_(func, x, t, beta, gamma, N):
+    plt.clf()
     result = odeint(func, x, t, args=(beta, gamma))
     plt.plot(t, result[:,0]/N*100, 'b', label='Susceptible') #취약자 동향 - 백분율
     plt.plot(t, result[:,1]/N*100, 'r', label='Infected') #감염자 동향 - 백분율
     plt.plot(t, result[:,2]/N*100, 'g', label='Recovered') #회복자 동향 - 백분율
     plt.xlabel('days(cnt)')
     plt.ylabel('percentage of each population (%)')
-    plt.title('Republic of Korea')
+    plt.title('Result of simulation')
     plt.legend(loc="upper right")
+    plt.show()
+    return
