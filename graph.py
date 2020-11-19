@@ -1,8 +1,6 @@
 import numpy as np 
-import time as tt
 import matplotlib.pylab as plt
 from scipy.integrate import odeint
-from simulation import *
 
 plt.ion()
 def SIR(x, t, beta, gamma):
