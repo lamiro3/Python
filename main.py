@@ -2,9 +2,6 @@ import sys
 from random import *
 from PyQt5.QtWidgets import *
 from simulation import *
-import numpy as np 
-import matplotlib.pylab as plt
-from scipy.integrate import odeint
 
 class mainScreen(QWidget):
     case_dic_x = {}

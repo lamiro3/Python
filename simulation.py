@@ -35,14 +35,22 @@ def do_simulation(x, y, num, INUM, sdrate): # 시뮬레이션 시작
         R = 0
         x_input = [0]*3
     
-    t.title(f'확산된지 {cnt}일 후 | S = {S} | I = {I} | R = {R} |')
+    S, I, R = countSIR(num, case_code)
+
+    x_input[0] = S
+    x_input[1] = I
+    x_input[2] = R
+    t_input = cnt
+    plot_(x_input, t_input, beta, 1/14, num, sdrate)
+
+    t.title(f'확산된지 {cnt}일 후 | 전체 = {num} | S = {S} | I = {I} | R = {R} | 사회적 거리두기 비율 = {sdrate}')
     
     if (I == 0 and S !=0 and R !=0) or R == num: # 시뮬레이션 종료
         t.exitonclick()
         print(f'감염병이 종식되기까지 총 {cnt}일이 소요되었습니다.')
         return
     
-    t.setup(width = 1000, height = 1000)
+    t.setup(width = 800, height = 800)
     t.ht()
     t.penup()
     t.speed(0)
@@ -68,14 +76,6 @@ def do_simulation(x, y, num, INUM, sdrate): # 시뮬레이션 시작
     if cnt >= 1:
         case_code, beta = activation_infect(x, y, num, distance, pos, case_code)
         case_code = activation_recover(x, y, num, case_code)
-
-    S, I, R = countSIR(num, case_code)
-
-    x_input[0] = S
-    x_input[1] = I
-    x_input[2] = R
-    t_input = np.linspace(0, cnt+10) #10일 후 까지의 동향 예측
-    plot_(SIR, x_input, t_input, beta, 1/14, num)
 
     t.clear()
     cnt = cnt + 1
