@@ -35,10 +35,10 @@ class getInfoFromKakao:
         self.comment_list.extend(list(map(lambda x : x.text, children)))
         
     def is_5_or_6(self):
-        if Kdriver.find_element_by_class_name('box_banner').find_element_by_class_name('link_banner'):
-            return 5
-        else:
+        if Kdriver.find_element_by_class_name('cont_visitor'):
             return 6
+        else:
+            return 5
     
     def gsReviews(self, pn):  
         
@@ -72,9 +72,9 @@ class getInfoFromKakao:
                         else:
                             idx = 8
                             
-                print(idx)
+                print(f'Total {(i+5*_)/pn*100:.3f}% data collection completed...')
             
-                if (i+5*_)%5 == 0:
+                if (i+5*_)%5 == 0 and (i+5*_) < pn:
                     next_tab = Kdriver.find_element_by_xpath(f'//*[@id="mArticle"]/div[{self.is_5_or_6()}]/div[3]/div/a[{tab_idx}]')
                     next_tab.send_keys(Keys.ENTER)
                 
