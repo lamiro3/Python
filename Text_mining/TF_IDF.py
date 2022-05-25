@@ -54,11 +54,13 @@ top_rated_reviews = set([])
 def get_recommendations(review, cosine_sim=cosine_sim):
     idx = indices[review]
     sim_scores = list(enumerate(cosine_sim[idx]))
+    print(sim_scores)
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[1]
-    return df['댓글'].iloc[sim_scores]
+    sim_scores = sim_scores[0]
+    review_indices = sim_scores[0]
+    return df['댓글'].iloc[review_indices]
  
 for review in np.array(df['댓글']):
-    print(get_recommendations(review))
+    top_rated_reviews.update(get_recommendations(review))
     
 print(top_rated_reviews)
