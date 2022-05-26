@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.metrics.pairwise import cosine_similarity
 
 PATH_list = [
@@ -49,18 +48,16 @@ df = n_tf_idf.getDF()
 # print(pd.DataFrame(data=n_tf_idf.generateDTM(), columns=n_tf_idf.getFeatureNames())
 indices = pd.Series(df.index, index=df['댓글'])
 cosine_sim = cosine_similarity(dtm, dtm)
-top_rated_reviews = set([])
+top_rated_reviews = set()
 
 def get_recommendations(review, cosine_sim=cosine_sim):
     idx = indices[review]
-    sim_scores = list(enumerate(cosine_sim[idx]))
-    print(sim_scores)
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[0]
-    review_indices = sim_scores[0]
-    return df['댓글'].iloc[review_indices]
- 
+    sim_scores = list(enumerate(cosine_sim[idx])) # [(단어 인덱스 번호, 코사인 유사도)]꼴의 리스트
+    sim_scores.sort(key=lambda x: x[1], reverse=True)
+    review_indices = list(map(lambda x:x[0], sim_scores))[1] # 자기 자신 제외 가장 비슷한 리뷰 출력
+    return df['댓글'].iloc[review_indices], review_indices
+
 for review in np.array(df['댓글']):
-    top_rated_reviews.update(get_recommendations(review))
-    
-print(top_rated_reviews)
+    print(get_recommendations(review))
+
+# 유사도 검사를 통해 가장 유사한 것 끼리 묶어서 워드클라우드 형태로 출력하기
