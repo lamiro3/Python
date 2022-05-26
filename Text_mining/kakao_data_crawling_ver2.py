@@ -1,3 +1,4 @@
+from statistics import mode
 from matplotlib.pyplot import table
 from selenium import webdriver
 from bs4 import BeautifulSoup
@@ -9,18 +10,6 @@ from selenium.common.exceptions import NoSuchElementException
 import warnings
 warnings.filterwarnings('ignore')
 import numpy as np
-
-df = pd.DataFrame()
-
-URL = input('크롤링할 웹페이지의 URL을 입력하시오: ')
-options = webdriver.ChromeOptions()
-options.add_experimental_option("excludeSwitches", ["enable-logging"])
-Kdriver = webdriver.Chrome('chromedriver.exe',options=options)
-Kdriver.get(URL)
-
-comment_list, temp_comment_list, rates_list = [], [], []
-columns = ['score', 'review']
-review_df = pd.DataFrame(columns=columns)
 
 class getInfoFromKakao:
     def __init__(self):
@@ -90,7 +79,11 @@ class getInfoFromKakao:
                 print(f'Total {(i+5*_)/pn*100:.3f}% data collection completed...')
             
                 if (i+5*_)%5 == 0 and (i+5*_) < pn:
-                    next_tab = Kdriver.find_element_by_xpath(f'//*[@id="mArticle"]/div[{self.is_5_or_6()}]/div[3]/div/a[{tab_idx}]')
+                    try:
+                        next_tab = Kdriver.find_element_by_xpath(f'//*[@id="mArticle"]/div[{self.is_5_or_6()}]/div[3]/div/a[{tab_idx}]')
+                    except:
+                        print('ERROR!!')
+                        continue
                     next_tab.send_keys(Keys.ENTER)
                 
                 else:
@@ -104,19 +97,54 @@ class getInfoFromKakao:
                         break
         return self.review_df
 
-kakaoINFO = getInfoFromKakao()
-kakaoINFO.Scroll()
+df = pd.DataFrame()
 
-kakaoHTML = Kdriver.page_source
-kakaoSOUP = BeautifulSoup(kakaoHTML, 'lxml')
+URLS = [
+    'https://place.map.kakao.com/8127939',
+    'https://place.map.kakao.com/7957603',
+    'https://place.map.kakao.com/2128087245',
+    'https://place.map.kakao.com/24546578',
+    'https://place.map.kakao.com/101079362',
+    'https://place.map.kakao.com/24576296',
+    'https://place.map.kakao.com/1846978591',
+    'https://place.map.kakao.com/14603333',
+    'https://place.map.kakao.com/18257430',
+    'https://place.map.kakao.com/1871688572',
+    'https://place.map.kakao.com/1398814753',
+    'https://place.map.kakao.com/189584498',
+    'https://place.map.kakao.com/10765113',
+    'https://place.map.kakao.com/7853463',
+    'https://place.map.kakao.com/27525888',
+    'https://place.map.kakao.com/8346182',
+    'https://place.map.kakao.com/15097841' 
+]
 
-place_name = kakaoSOUP.find('h2', {'class':'tit_location'}).text
-review_count = int(kakaoSOUP.find('strong', {'class':'total_evaluation'}).find('span',{'class':'color_b'}).text)
-page_num = math.ceil(review_count/5)
+columns = ['평점', '댓글']
+review_df = pd.DataFrame(columns=columns)
 
-df = kakaoINFO.gsReviews(page_num)
-df['review'].replace('', np.nan, inplace=True)
-df.dropna(subset=['review'], inplace=True)
-df.to_csv(f'{place_name}_kakao_review.csv',encoding='utf-8',index=False)
+for URL in URLS:
+    # URL = input('크롤링할 웹페이지의 URL을 입력하시오: ')
 
-Kdriver.quit()
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    Kdriver = webdriver.Chrome('Text_mining\chromedriver.exe',options=options)
+    Kdriver.get(URL)
+
+    comment_list, temp_comment_list, rates_list = [], [], []
+
+    kakaoINFO = getInfoFromKakao()
+    kakaoINFO.Scroll()
+
+    kakaoHTML = Kdriver.page_source
+    kakaoSOUP = BeautifulSoup(kakaoHTML, 'lxml')
+
+    place_name = kakaoSOUP.find('h2', {'class':'tit_location'}).text
+    review_count = int(kakaoSOUP.find('strong', {'class':'total_evaluation'}).find('span',{'class':'color_b'}).text)
+    page_num = math.ceil(review_count/5)
+
+    df = kakaoINFO.gsReviews(page_num)
+    df['댓글'].replace('', np.nan, inplace=True)
+    df.dropna(subset=['댓글'], inplace=True)
+    df.to_csv(f'Text_mining\csv\kakao_review.csv',encoding='utf-8',index=False, mode='a')
+
+    Kdriver.quit()

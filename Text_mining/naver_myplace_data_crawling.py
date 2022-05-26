@@ -6,24 +6,14 @@ import pandas as pd
 
 df = pd.DataFrame()
 
-URL = input("크롤링할 웹페이지의 URL을 입력하시오(네이버 모바일 기준): ")
-
-Ndriver = webdriver.Chrome('Text_mining\chromedriver.exe')
-Ndriver.get(URL)
-
-comment_list, visit_count_list = [], []
-visits = []
-
 class getInfoFromNaver:
     def __init__(self):
         self.comment_list = comment_list
         self.visit_count_list = visit_count_list
         self.visit_counts = visits
-
     def plusBtn(self):
         btn = Ndriver.find_element_by_class_name('_3iTUo')
         btn.click()
-
     def Scroll(self):
         body = Ndriver.find_element('css selector', 'body')
         for rep in range(5):
@@ -44,29 +34,49 @@ class getInfoFromNaver:
     def getVSCounts(self):
         return self.visit_count_list
 
-naverINFO = getInfoFromNaver()
-naverHTML = Ndriver.page_source
-naverSoup = BeautifulSoup(naverHTML, 'lxml')
+URLS = [
+    'https://m.place.naver.com/hospital/33445044/review/visitor?entry=pll&from=PLACE_AD&n_ad_group_type=10&n_query=%EA%B0%95%EB%82%A8%EA%B5%AC%EC%9D%B4%EB%B9%84%EC%9D%B8%ED%9B%84%EA%B3%BC',
+    'https://m.place.naver.com/hospital/1550045096/review/visitor?entry=pll&from=PLACE_AD&n_ad_group_type=10&n_query=%EA%B0%95%EB%82%A8%EA%B5%AC%EC%9D%B4%EB%B9%84%EC%9D%B8%ED%9B%84%EA%B3%BC',
+    'https://m.place.naver.com/hospital/11626067/review/visitor?entry=pll',
+    'https://m.place.naver.com/hospital/19998092/review/visitor?entry=pll',
+    'https://m.place.naver.com/hospital/12073000/review/visitor?entry=pll',
+    'https://m.place.naver.com/hospital/11526512/review/visitor?entry=pll',
+    'https://m.place.naver.com/hospital/34837440/review/visitor?entry=pll',
+    'https://m.place.naver.com/hospital/33445044/review/visitor?entry=pll',
+    'https://m.place.naver.com/hospital/37675644/review/visitor?entry=pll',
+    'https://m.place.naver.com/hospital/13398465/review/visitor?entry=pll',
+]
 
-review_count = int(naverSoup.find('span', {'class': 'place_section_count'}).text)
-place_name = naverSoup.find('span', {'class': '_3XamX'}).text
-        
-count = 0
+for URL in URLS:
+    # URL = input("크롤링할 웹페이지의 URL을 입력하시오(네이버 모바일 기준): ")
+    Ndriver = webdriver.Chrome('Text_mining\chromedriver.exe')
+    Ndriver.get(URL)
 
-while count < review_count:
-    naverINFO.Scroll()
-    count += 10
-    if count < review_count:
-        naverINFO.plusBtn()
-        print(f'Total {count/review_count*100:.3f}% data collection completed...')
-    time.sleep(1)
+    comment_list, visit_count_list = [], []
+    visits = []
 
-finalHTML = Ndriver.page_source
-finalSoup = BeautifulSoup(finalHTML, 'lxml')
+    naverINFO = getInfoFromNaver()
+    naverHTML = Ndriver.page_source
+    naverSoup = BeautifulSoup(naverHTML, 'lxml')
 
-naverINFO.setComments(finalSoup)
+    review_count = int(naverSoup.find('span', {'class': 'place_section_count'}).text)
+    place_name = naverSoup.find('span', {'class': '_3XamX'}).text
+            
+    count = 0
 
-df = df.append(pd.DataFrame(naverINFO.getComments(), columns=['댓글']))
-df.to_csv(f'Text_mining\csv\{place_name}_네이버_마이플레이스_리뷰_수집.csv')
+    while count < review_count:
+        naverINFO.Scroll()
+        count += 10
+        if count < review_count:
+            naverINFO.plusBtn()
+            print(f'Total {count/review_count*100:.3f}% data collection completed...')
+        time.sleep(1)
 
-Ndriver.quit()
+    finalHTML = Ndriver.page_source
+    finalSoup = BeautifulSoup(finalHTML, 'lxml')
+
+    naverINFO.setComments(finalSoup)
+
+    df = df.append(pd.DataFrame(naverINFO.getComments(), columns=['댓글']))
+    df.to_csv(f'Text_mining\csv\\naver_review.csv',encoding='utf-8',index=False,mode='a')
+    Ndriver.quit()
