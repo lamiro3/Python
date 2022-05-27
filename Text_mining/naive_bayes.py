@@ -3,6 +3,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 import pandas as pd
+import re
 
 class TF_IDF:
     def __init__(self):
@@ -26,6 +27,8 @@ TFID = TF_IDF()
 df = pd.read_csv('Text_mining\csv\kakao_review.csv')
 df = df.dropna()
 df.drop_duplicates(subset='댓글', keep='first', inplace=True)
+df['댓글'] = df['댓글'].map(lambda x: re.sub(r'[^\w\s]', ' ', x))
+
 length = len(df)
 
 train, test = df[:length//2], df[length//2:]

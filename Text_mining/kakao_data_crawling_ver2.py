@@ -100,23 +100,15 @@ class getInfoFromKakao:
 df = pd.DataFrame()
 
 URLS = [
-    'https://place.map.kakao.com/8127939',
-    'https://place.map.kakao.com/7957603',
+    'https://place.map.kakao.com/1269299534',
     'https://place.map.kakao.com/2128087245',
+    'https://place.map.kakao.com/8127939',
+    'https://place.map.kakao.com/13048975',
+    'https://place.map.kakao.com/9483871',
+    'https://place.map.kakao.com/7957603',
     'https://place.map.kakao.com/24546578',
-    'https://place.map.kakao.com/101079362',
-    'https://place.map.kakao.com/24576296',
-    'https://place.map.kakao.com/1846978591',
-    'https://place.map.kakao.com/14603333',
-    'https://place.map.kakao.com/18257430',
-    'https://place.map.kakao.com/1871688572',
-    'https://place.map.kakao.com/1398814753',
-    'https://place.map.kakao.com/189584498',
-    'https://place.map.kakao.com/10765113',
-    'https://place.map.kakao.com/7853463',
-    'https://place.map.kakao.com/27525888',
-    'https://place.map.kakao.com/8346182',
-    'https://place.map.kakao.com/15097841' 
+    'https://place.map.kakao.com/27557486',
+    'https://place.map.kakao.com/12117601'
 ]
 
 columns = ['평점', '댓글']
