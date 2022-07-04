@@ -1,17 +1,8 @@
-remained = int(input())
-cnt = 0
+N, M = map(int, input().split())
+MINS = []
 
-def get_coin_num(won):
-    global remained
-    global cnt
-    if remained >= won:
-        cnt += remained//won
-        remained %= won
+for _ in range(N):
+    row = list(map(int, input().split()))
+    MINS.append(min(row))
 
-while remained != 0:
-    get_coin_num(500)
-    get_coin_num(100)
-    get_coin_num(50)
-    get_coin_num(10)
-
-print(cnt)
+print(max(MINS))
