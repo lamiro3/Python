@@ -60,9 +60,9 @@ COVID-19 확산 이후 사회적 거리두기는 가장 중요한 방역 수단 
 
 프로그램은 기능별로 3개의 Python 파일로 구성되어 있습니다.
 
-├── main.py # 입력 UI 및 초기 조건 설정
-├── simulation.py # 바이러스 확산 시뮬레이션 로직
-└── graph.py # S / I / R 변화 그래프 시각화
+- main.py # 입력 UI 및 초기 조건 설정
+- simulation.py # 바이러스 확산 시뮬레이션 로직
+- graph.py # S / I / R 변화 그래프 시각화
 
 ### 전체 구조 개요
 ![Program Architecture](images/program_overview.png)
@@ -101,16 +101,16 @@ COVID-19 확산 이후 사회적 거리두기는 가장 중요한 방역 수단 
 ### 사회적 거리두기 강도별 감염자 변화
 
 #### 사회적 거리두기 0%
-![SD 0](images/result_sd0.png)
+![SD 0](images/sd0.png)
 
 #### 사회적 거리두기 25%
-![SD 25](images/result_sd25.png)
+![SD 25](images/sd25.png)
 
 #### 사회적 거리두기 50%
-![SD 50](images/result_sd50.png)
+![SD 50](images/sd50.png)
 
 #### 사회적 거리두기 75%
-![SD 75](images/result_sd75.png)
+![SD 75](images/sd75.png)
 
 ### 분석 결과
 
